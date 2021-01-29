@@ -1,0 +1,27 @@
+# deps
+node_modules
+
+# dotenv
+.env
+
+# build
+dist
+
+# parcel
+.cache
+.parcel-cache
+
+# nyc
+coverage
+.nyc_output
+
+# yarn
+.yarn-integrity
+
+# logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
