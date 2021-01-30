@@ -4,8 +4,32 @@
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <title>mvc.ts</title>
+    <link href="./styles.css" rel="stylesheet" />
   </head>
   <body>
+    <div id="app" class="max-w-5xl mx-auto antialiased bg-gray-50">
+      <h1 class="text-3xl font-bold">Todos</h1>
+      <div>
+        <div>
+          <input
+            id="add-input"
+            type="text"
+            placeholder="enter your task"
+            aria-label="input task field"
+          />
+        </div>
+        <div>
+          <button id="add-btn">Add Task</button>
+        </div>
+      </div>
+      <ul id="todos">
+        <li>
+          <input type="checkbox" />
+          <span>buy food</span>
+          <button>Delete</button>
+        </li>
+      </ul>
+    </div>
     <script type="module" src="./index.ts"></script>
   </body>
 </html>
