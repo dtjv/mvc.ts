@@ -2,33 +2,56 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="initial-scale=1.0, width=device-width" />
     <title>mvc.ts</title>
     <link href="./styles.css" rel="stylesheet" />
   </head>
   <body>
-    <div id="app" class="max-w-5xl mx-auto antialiased bg-gray-50">
-      <h1 class="text-3xl font-bold">Todos</h1>
-      <div>
-        <div>
-          <input
-            id="add-input"
-            type="text"
-            placeholder="enter your task"
-            aria-label="input task field"
-          />
-        </div>
-        <div>
-          <button id="add-btn">Add Task</button>
-        </div>
+    <div id="app" class="antialiased">
+      <div class="px-4 py-8 mx-auto sm:px-0 sm:w-1/2 space-y-8">
+        <header class="pb-1 border-b border-gray-200">
+          <h1 class="text-4xl font-bold text-purple-500">Todos</h1>
+        </header>
+        <form>
+          <div class="flex justify-between">
+            <input
+              id="add-input"
+              class="block w-full placeholder-gray-500 border-gray-300 rounded-md focus:border-purple-300 focus:ring focus:ring-purple-200 focus:ring-opacity-50"
+              type="text"
+              placeholder="Enter your task"
+              aria-label="input task field"
+            />
+            <button
+              id="add-btn"
+              class="flex items-center justify-center flex-shrink-0 h-auto px-6 ml-4 text-base font-semibold leading-snug text-white bg-purple-500 border border-transparent rounded-md hover:bg-purple-400 focus:outline-none focus:bg-purple-400"
+            >
+              Add Task
+            </button>
+          </div>
+        </form>
+        <ul id="todos" class="space-y-4">
+          <li
+            class="flex items-center px-4 py-4 bg-gray-50 rounded-md space-x-4"
+          >
+            <input
+              type="checkbox"
+              aria-label="select (name of item)"
+              class="text-purple-500 border-gray-300 rounded focus:border-purple-300 focus:ring focus:ring-purple-200 focus:ring-opacity-50"
+            />
+            <span
+              contenteditable="true"
+              class="flex-grow px-3 py-2 text-base font-medium hover:bg-purple-100 rounded-md focus:outline-none focus:ring focus:ring-purple-200 focus:ring-opacity-50 focus:bg-white"
+              >buy food</span
+            >
+            <button
+              id="add-btn"
+              class="block px-6 py-2 ml-4 text-base font-semibold leading-snug text-white bg-purple-500 border border-transparent rounded-md hover:bg-purple-400 focus:outline-none focus:bg-purple-400"
+            >
+              Delete
+            </button>
+          </li>
+        </ul>
       </div>
-      <ul id="todos">
-        <li>
-          <input type="checkbox" />
-          <span>buy food</span>
-          <button>Delete</button>
-        </li>
-      </ul>
     </div>
     <script type="module" src="./index.ts"></script>
   </body>
