@@ -26,5 +26,8 @@
     "parserOptions": {
       "project": "./tsconfig.xo.json"
     }
+  },
+  "dependencies": {
+    "cuid": "2.1.8"
   }
 }

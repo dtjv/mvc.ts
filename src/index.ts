@@ -1,14 +1,34 @@
-enum Status {
-  NO,
-  YES,
-}
+import cuid from 'cuid'
 
-interface Todo {
-  task: string
-  done: boolean
-  status: Status
-}
+import { Todo } from './types'
+import { App } from './app'
+import { View } from './view'
+import { Todos } from './todos'
+import { Store } from './store'
 
-const todo: Todo = { task: 'Goodbye World', done: false, status: Status.NO }
+const view = new View()
+const todos = new Todos()
+const store = new Store('todos', localStorage)
+const app = new App(todos, view, store)
 
-console.log(todo)
+const data: Todo[] = [
+  {
+    id: cuid(),
+    task: 'go for a run',
+    done: false,
+  },
+  {
+    id: cuid(),
+    task: 'buy bread',
+    done: false,
+  },
+  {
+    id: cuid(),
+    task: 'lift weights',
+    done: true,
+  },
+]
+
+store.set(data)
+
+app.start()
