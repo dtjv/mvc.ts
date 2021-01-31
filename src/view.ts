@@ -6,7 +6,7 @@ export enum ViewEvents {
   REMOVE_TODO = 'REMOVE_TODO',
 }
 
-type Handler = (props: Partial<Todo>, event?: Event) => void
+export type Handler = (props: Partial<Todo>, event?: Event) => void
 
 type Handlers = Record<string, Handler>
 
@@ -49,9 +49,10 @@ export class View {
     this.$root.append(this.$wrapper)
 
     this.$taskBtn.addEventListener('click', this.createTodo.bind(this))
+    this.$todos.addEventListener('change', this.toggleTodo.bind(this))
   }
 
-  registerHandler({
+  public registerHandler({
     event,
     handler,
   }: {
@@ -61,12 +62,36 @@ export class View {
     this.handlers[event] = handler
   }
 
-  createTodo(): void {
+  public render(todos: Todo[]): void {
+    while (this.$todos.firstChild) {
+      this.$todos.firstChild.remove()
+    }
+
+    if (todos.length === 0) {
+      this.$noTodos.classList.remove('hidden')
+    } else {
+      this.$noTodos.classList.add('hidden')
+      this.$todos.append(...todos.map((todo) => this.createItem(todo)))
+    }
+  }
+
+  private createTodo(): void {
     this.handlers[ViewEvents.CREATE_TODO]?.({ task: this.$taskTxt.value })
     this.$taskTxt.value = ''
   }
 
-  createElement(tag: string, classList?: string) {
+  private toggleTodo(event: Event): void {
+    const target = event?.target as HTMLInputElement
+
+    if (target?.type === 'checkbox') {
+      this.handlers[ViewEvents.UPDATE_TODO]?.({
+        id: target?.parentElement?.id,
+        done: target?.checked,
+      })
+    }
+  }
+
+  private createElement(tag: string, classList?: string) {
     const $element = this.document.createElement(tag)
 
     if (classList) {
@@ -76,11 +101,11 @@ export class View {
     return $element
   }
 
-  createItem(todo: Todo): HTMLElement {
+  private createItem(todo: Todo): HTMLElement {
     const $li = this.createElement('li', 'todo')
     $li.setAttribute('id', todo.id)
 
-    const $todoChk = this.createElement('input', 'todo-chk')
+    const $todoChk = this.createElement('input', 'todo-chk') as HTMLInputElement
     $todoChk.setAttribute('type', 'checkbox')
     if (todo.done) {
       $todoChk.setAttribute('checked', '')
@@ -104,18 +129,5 @@ export class View {
     $li.append($todoChk, $todoTxt, $todoBtn)
 
     return $li
-  }
-
-  render(todos: Todo[]): void {
-    while (this.$todos.firstChild) {
-      this.$todos.firstChild.remove()
-    }
-
-    if (todos.length === 0) {
-      this.$noTodos.classList.remove('hidden')
-    } else {
-      this.$noTodos.classList.add('hidden')
-      this.$todos.append(...todos.map((todo) => this.createItem(todo)))
-    }
   }
 }
