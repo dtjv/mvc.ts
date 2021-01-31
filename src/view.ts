@@ -17,7 +17,7 @@ export class View {
   private readonly $header: HTMLElement
   private readonly $title: HTMLElement
   private readonly $form: HTMLElement
-  private readonly $taskTxt: HTMLElement
+  private readonly $taskTxt: HTMLInputElement
   private readonly $taskBtn: HTMLElement
   private readonly $todos: HTMLElement
   private readonly $noTodos: HTMLElement
@@ -34,7 +34,7 @@ export class View {
     this.$title = this.createElement('h1')
     this.$title.textContent = 'Todos'
     this.$form = this.createElement('form', 'flex justify-between')
-    this.$taskTxt = this.createElement('input', 'task-txt')
+    this.$taskTxt = this.createElement('input', 'task-txt') as HTMLInputElement
     this.$taskTxt.setAttribute('type', 'text')
     this.$taskTxt.setAttribute('placeholder', 'Enter your task')
     this.$taskBtn = this.createElement('button', 'task-btn')
@@ -47,6 +47,8 @@ export class View {
     this.$form.append(this.$taskTxt, this.$taskBtn)
     this.$wrapper.append(this.$header, this.$form, this.$todos, this.$noTodos)
     this.$root.append(this.$wrapper)
+
+    this.$taskBtn.addEventListener('click', this.createTodo.bind(this))
   }
 
   registerHandler({
@@ -57,6 +59,11 @@ export class View {
     handler: Handler
   }): void {
     this.handlers[event] = handler
+  }
+
+  createTodo(): void {
+    this.handlers[ViewEvents.CREATE_TODO]?.({ task: this.$taskTxt.value })
+    this.$taskTxt.value = ''
   }
 
   createElement(tag: string, classList?: string) {

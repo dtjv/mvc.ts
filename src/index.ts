@@ -8,4 +8,4 @@ const todos = new Todos()
 const store = new Store('todos', localStorage)
 const app = new App(todos, view, store)
 
-app.start()
+app.show()
