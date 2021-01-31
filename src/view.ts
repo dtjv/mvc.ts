@@ -1,18 +1,29 @@
 import { Todo } from './types'
 
+export enum ViewEvents {
+  CREATE_TODO = 'CREATE_TODO',
+  UPDATE_TODO = 'UPDATE_TODO',
+  REMOVE_TODO = 'REMOVE_TODO',
+}
+
+type Handler = (props: Partial<Todo>, event?: Event) => void
+
+type Handlers = Record<string, Handler>
+
 export class View {
-  private $root: HTMLElement | null
-  private $wrapper: HTMLElement
-  private $header: HTMLElement
-  private $title: HTMLElement
-  private $form: HTMLElement
-  private $taskTxt: HTMLElement
-  private $taskBtn: HTMLElement
-  private $todos: HTMLElement
-  private $noTodos: HTMLElement
+  private handlers: Handlers = {}
+  private readonly $root: HTMLElement | null
+  private readonly $wrapper: HTMLElement
+  private readonly $header: HTMLElement
+  private readonly $title: HTMLElement
+  private readonly $form: HTMLElement
+  private readonly $taskTxt: HTMLElement
+  private readonly $taskBtn: HTMLElement
+  private readonly $todos: HTMLElement
+  private readonly $noTodos: HTMLElement
 
   constructor(private readonly document: Document, rootId: string) {
-    this.$root = this.document.getElementById(rootId)
+    this.$root = this.document.querySelector(rootId)
 
     if (!this.$root) {
       throw new Error(`root id, '${rootId}', must exist in doc`)
@@ -38,14 +49,24 @@ export class View {
     this.$root.append(this.$wrapper)
   }
 
-  createElement(el: string, classList?: string) {
-    const element = this.document.createElement(el)
+  registerHandler({
+    event,
+    handler,
+  }: {
+    event: ViewEvents
+    handler: Handler
+  }): void {
+    this.handlers[event] = handler
+  }
+
+  createElement(tag: string, classList?: string) {
+    const $element = this.document.createElement(tag)
 
     if (classList) {
-      element.classList.add(...classList.split(' '))
+      $element.classList.add(...classList.split(' '))
     }
 
-    return element
+    return $element
   }
 
   createItem(todo: Todo): HTMLElement {
@@ -80,7 +101,7 @@ export class View {
 
   render(todos: Todo[]): void {
     while (this.$todos.firstChild) {
-      this.$todos.removeChild(this.$todos.firstChild)
+      this.$todos.firstChild.remove()
     }
 
     if (todos.length === 0) {
