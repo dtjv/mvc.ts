@@ -16,6 +16,7 @@ export class View {
   private readonly $wrapper: HTMLElement
   private readonly $header: HTMLElement
   private readonly $title: HTMLElement
+  private readonly $version: HTMLElement
   private readonly $task: HTMLElement
   private readonly $taskTxt: HTMLInputElement
   private readonly $taskBtn: HTMLElement
@@ -33,6 +34,8 @@ export class View {
     this.$header = this.createElement('header')
     this.$title = this.createElement('h1')
     this.$title.textContent = 'Todos'
+    this.$version = this.createElement('span', 'version')
+    this.$version.textContent = 'v1'
     this.$task = this.createElement('div', 'flex justify-between')
     this.$taskTxt = this.createElement('input', 'task-txt') as HTMLInputElement
     this.$taskTxt.setAttribute('type', 'text')
@@ -43,7 +46,7 @@ export class View {
     this.$noTodos = this.createElement('p', 'hidden font-bold text-gray-500')
     this.$noTodos.textContent = 'No tasks for you!'
 
-    this.$header.append(this.$title)
+    this.$header.append(this.$title, this.$version)
     this.$task.append(this.$taskTxt, this.$taskBtn)
     this.$wrapper.append(this.$header, this.$task, this.$todos, this.$noTodos)
     this.$root.append(this.$wrapper)

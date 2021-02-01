@@ -14,7 +14,11 @@
   }
 
   header {
-    @apply pb-1 border-b border-gray-200;
+    @apply pb-1 border-b border-gray-200 flex items-baseline space-x-1.5;
+  }
+
+  .version {
+    @apply text-lg font-semibold text-black;
   }
 
   .task-txt {
