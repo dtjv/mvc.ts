@@ -1,5 +1,4 @@
-import { Todo } from './types'
-import { Todos } from './todos'
+import { Todo, Todos } from './todos'
 import { View, ViewEvents } from './view'
 import { Store } from './store'
 

@@ -1,5 +1,10 @@
 import cuid from 'cuid'
-import { Todo } from './types'
+
+export type Todo = {
+  id: string
+  task: string
+  done: boolean
+}
 
 export class Todos {
   private todos: Todo[] = []

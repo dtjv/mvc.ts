@@ -1,4 +1,4 @@
-import { Todo } from './types'
+import { Todo } from './todos'
 
 export enum ViewEvents {
   CREATE_TODO = 'CREATE_TODO',
@@ -8,10 +8,8 @@ export enum ViewEvents {
 
 export type Handler = (props: Partial<Todo>, event?: Event) => void
 
-type Handlers = Record<string, Handler>
-
 export class View {
-  private handlers: Handlers = {}
+  private readonly handlers: Map<string, Handler> = new Map()
   private txtCache = ''
 
   private readonly $root: HTMLElement | null
@@ -64,7 +62,7 @@ export class View {
     event: ViewEvents
     handler: Handler
   }): void {
-    this.handlers[event] = handler
+    this.handlers.set(event, handler)
   }
 
   public render(todos: Todo[]): void {
@@ -81,7 +79,7 @@ export class View {
   }
 
   private createTodo(): void {
-    this.handlers[ViewEvents.CREATE_TODO]?.({ task: this.$taskTxt.value })
+    this.handlers.get(ViewEvents.CREATE_TODO)?.({ task: this.$taskTxt.value })
     this.$taskTxt.value = ''
   }
 
@@ -89,7 +87,7 @@ export class View {
     const target = event.target as HTMLInputElement
 
     if (target.classList.contains('todo-chk')) {
-      this.handlers[ViewEvents.UPDATE_TODO]?.({
+      this.handlers.get(ViewEvents.UPDATE_TODO)?.({
         id: target.parentElement?.id,
         done: target.checked,
       })
@@ -108,7 +106,7 @@ export class View {
     const target = event.target as HTMLElement
 
     if (target.classList.contains('todo-txt')) {
-      this.handlers[ViewEvents.UPDATE_TODO]?.({
+      this.handlers.get(ViewEvents.UPDATE_TODO)?.({
         id: target.parentElement?.id,
         task: target.textContent ? target.textContent : this.txtCache,
       })
@@ -120,7 +118,7 @@ export class View {
     const target = event.target as HTMLElement
 
     if (target.classList.contains('todo-btn')) {
-      this.handlers[ViewEvents.REMOVE_TODO]?.({
+      this.handlers.get(ViewEvents.REMOVE_TODO)?.({
         id: target.parentElement?.id,
       })
     }
