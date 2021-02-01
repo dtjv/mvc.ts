@@ -11,7 +11,8 @@
     "lint": "xo",
     "dev": "parcel serve ./src/index.html",
     "build": "parcel build ./src/index.html",
-    "deploy": "npm run clean && npm run build && gh-pages -d dist"
+    "predeploy": "yarn clean && yarn build --public-url /mvc.ts/",
+    "deploy": "gh-pages -d dist"
   },
   "devDependencies": {
     "@dtjv/tsconfig": "0.1.1",
