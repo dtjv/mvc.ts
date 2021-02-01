@@ -12,6 +12,8 @@ type Handlers = Record<string, Handler>
 
 export class View {
   private handlers: Handlers = {}
+  private txtCache = ''
+
   private readonly $root: HTMLElement | null
   private readonly $wrapper: HTMLElement
   private readonly $header: HTMLElement
@@ -51,6 +53,8 @@ export class View {
     this.$taskBtn.addEventListener('click', this.createTodo.bind(this))
     this.$todos.addEventListener('change', this.toggleTodo.bind(this))
     this.$todos.addEventListener('click', this.removeTodo.bind(this))
+    this.$todos.addEventListener('focusin', this.cacheTodoTxt.bind(this))
+    this.$todos.addEventListener('focusout', this.updateTodo.bind(this))
   }
 
   public registerHandler({
@@ -82,22 +86,42 @@ export class View {
   }
 
   private toggleTodo(event: Event): void {
-    const target = event?.target as HTMLInputElement
+    const target = event.target as HTMLInputElement
 
-    if (target?.classList.contains('todo-chk')) {
+    if (target.classList.contains('todo-chk')) {
       this.handlers[ViewEvents.UPDATE_TODO]?.({
-        id: target?.parentElement?.id,
-        done: target?.checked,
+        id: target.parentElement?.id,
+        done: target.checked,
       })
     }
   }
 
-  private removeTodo(event: Event): void {
-    const target = event?.target as HTMLInputElement
+  private cacheTodoTxt(event: Event): void {
+    const target = event.target as HTMLElement
 
-    if (target?.classList.contains('todo-btn')) {
+    if (target?.classList.contains('todo-txt')) {
+      this.txtCache = target.textContent!
+    }
+  }
+
+  private updateTodo(event: Event): void {
+    const target = event.target as HTMLElement
+
+    if (target.classList.contains('todo-txt')) {
+      this.handlers[ViewEvents.UPDATE_TODO]?.({
+        id: target.parentElement?.id,
+        task: target.textContent ? target.textContent : this.txtCache,
+      })
+      this.txtCache = ''
+    }
+  }
+
+  private removeTodo(event: Event): void {
+    const target = event.target as HTMLElement
+
+    if (target.classList.contains('todo-btn')) {
       this.handlers[ViewEvents.REMOVE_TODO]?.({
-        id: target?.parentElement?.id,
+        id: target.parentElement?.id,
       })
     }
   }
