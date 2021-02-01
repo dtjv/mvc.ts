@@ -38,6 +38,6 @@
   }
 
   .todo-btn {
-    @apply block px-6 py-2 ml-4 text-base font-semibold leading-snug text-purple-400 bg-white border border-purple-400 rounded-md hover:text-white hover:bg-purple-400 focus:outline-none focus:bg-purple-400;
+    @apply block px-6 py-2 ml-4 text-base font-semibold leading-snug text-purple-400 bg-white border border-purple-400 rounded-md hover:text-white hover:bg-purple-400 focus:outline-none focus:bg-purple-400 focus:text-white;
   }
 }
