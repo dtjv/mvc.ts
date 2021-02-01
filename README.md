@@ -2,6 +2,8 @@
 
 A simple todo MVC app written in TypeScript.
 
+### [View the demo](https://dtjv.io/mvc.ts)
+
 ## Technology
 
 - [TypeScript](https://www.typescriptlang.org/)
