@@ -16,7 +16,7 @@ export class View {
   private readonly $wrapper: HTMLElement
   private readonly $header: HTMLElement
   private readonly $title: HTMLElement
-  private readonly $form: HTMLElement
+  private readonly $task: HTMLElement
   private readonly $taskTxt: HTMLInputElement
   private readonly $taskBtn: HTMLElement
   private readonly $todos: HTMLElement
@@ -33,7 +33,7 @@ export class View {
     this.$header = this.createElement('header')
     this.$title = this.createElement('h1')
     this.$title.textContent = 'Todos'
-    this.$form = this.createElement('form', 'flex justify-between')
+    this.$task = this.createElement('div', 'flex justify-between')
     this.$taskTxt = this.createElement('input', 'task-txt') as HTMLInputElement
     this.$taskTxt.setAttribute('type', 'text')
     this.$taskTxt.setAttribute('placeholder', 'Enter your task')
@@ -44,12 +44,13 @@ export class View {
     this.$noTodos.textContent = 'No tasks for you!'
 
     this.$header.append(this.$title)
-    this.$form.append(this.$taskTxt, this.$taskBtn)
-    this.$wrapper.append(this.$header, this.$form, this.$todos, this.$noTodos)
+    this.$task.append(this.$taskTxt, this.$taskBtn)
+    this.$wrapper.append(this.$header, this.$task, this.$todos, this.$noTodos)
     this.$root.append(this.$wrapper)
 
     this.$taskBtn.addEventListener('click', this.createTodo.bind(this))
     this.$todos.addEventListener('change', this.toggleTodo.bind(this))
+    this.$todos.addEventListener('click', this.removeTodo.bind(this))
   }
 
   public registerHandler({
@@ -83,10 +84,20 @@ export class View {
   private toggleTodo(event: Event): void {
     const target = event?.target as HTMLInputElement
 
-    if (target?.type === 'checkbox') {
+    if (target?.classList.contains('todo-chk')) {
       this.handlers[ViewEvents.UPDATE_TODO]?.({
         id: target?.parentElement?.id,
         done: target?.checked,
+      })
+    }
+  }
+
+  private removeTodo(event: Event): void {
+    const target = event?.target as HTMLInputElement
+
+    if (target?.classList.contains('todo-btn')) {
+      this.handlers[ViewEvents.REMOVE_TODO]?.({
+        id: target?.parentElement?.id,
       })
     }
   }
