@@ -1,0 +1,47 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  h1 {
+    @apply text-4xl font-bold text-emerald-500;
+  }
+}
+
+@layer components {
+  .wrapper {
+    @apply max-w-2xl px-4 py-8 mx-auto antialiased sm:px-0 sm:w-1/2 space-y-8;
+  }
+
+  header {
+    @apply pb-1 border-b border-gray-200 flex items-baseline space-x-1.5;
+  }
+
+  .version {
+    @apply text-lg font-semibold text-black;
+  }
+
+  .task-txt {
+    @apply block w-full placeholder-gray-500 border-gray-300 rounded-md focus:border-emerald-300 focus:ring focus:ring-emerald-200 focus:ring-opacity-50;
+  }
+
+  .task-btn {
+    @apply flex items-center justify-center flex-shrink-0 h-auto px-6 ml-4 text-base font-semibold leading-snug text-white border border-transparent bg-emerald-500 rounded-md hover:bg-emerald-400 focus:outline-none focus:bg-emerald-400;
+  }
+
+  .todo {
+    @apply flex items-center px-4 py-4 bg-gray-50 rounded-md space-x-4;
+  }
+
+  .todo-chk {
+    @apply border-gray-300 rounded text-emerald-500 focus:border-emerald-300 focus:ring focus:ring-emerald-200 focus:ring-opacity-50;
+  }
+
+  .todo-txt {
+    @apply flex-grow px-3 py-2 text-base font-medium hover:bg-emerald-100 rounded-md focus:outline-none focus:ring focus:ring-emerald-200 focus:ring-opacity-50 focus:bg-white;
+  }
+
+  .todo-btn {
+    @apply block px-6 py-2 ml-4 text-base font-semibold leading-snug bg-white border text-emerald-400 border-emerald-400 rounded-md hover:text-white hover:bg-emerald-400 focus:outline-none focus:bg-emerald-400 focus:text-white;
+  }
+}
