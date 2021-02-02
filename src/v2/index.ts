@@ -3,9 +3,9 @@ import { View } from './view'
 import { Todos } from './todos'
 import { Store } from './store'
 
-const view = new View(window.document, '#app')
+const store = new Store('todos2', localStorage)
 const todos = new Todos()
-const store = new Store('todos', localStorage)
+const view = new View(window.document, '#app', todos)
 const app = new App(todos, view, store)
 
 app.show()

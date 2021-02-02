@@ -1,15 +1,6 @@
-import { Todo } from './todos'
-
-export enum ViewEvents {
-  CREATE_TODO = 'CREATE_TODO',
-  UPDATE_TODO = 'UPDATE_TODO',
-  REMOVE_TODO = 'REMOVE_TODO',
-}
-
-export type Handler = (props: Partial<Todo>, event?: Event) => void
+import { Todo, Todos } from './todos'
 
 export class View {
-  private readonly handlers: Map<string, Handler> = new Map()
   private txtCache = ''
 
   private readonly $root: HTMLElement | null
@@ -23,7 +14,11 @@ export class View {
   private readonly $todos: HTMLElement
   private readonly $noTodos: HTMLElement
 
-  constructor(private readonly document: Document, rootId: string) {
+  constructor(
+    private readonly document: Document,
+    rootId: string,
+    private readonly todos: Todos
+  ) {
     this.$root = this.document.querySelector(rootId)
 
     if (!this.$root) {
@@ -58,31 +53,29 @@ export class View {
     this.$todos.addEventListener('focusout', this.updateTodo.bind(this))
   }
 
-  public registerHandler({
-    event,
-    handler,
-  }: {
-    event: ViewEvents
-    handler: Handler
-  }): void {
-    this.handlers.set(event, handler)
-  }
-
-  public render(todos: Todo[]): void {
+  public render(): void {
     while (this.$todos.firstChild) {
       this.$todos.firstChild.remove()
     }
 
-    if (todos.length === 0) {
+    if (this.todos.size() === 0) {
       this.$noTodos.classList.remove('hidden')
     } else {
       this.$noTodos.classList.add('hidden')
-      this.$todos.append(...todos.map((todo) => this.createItem(todo)))
+      this.$todos.append(
+        ...this.todos.todos.map((todo) => this.createItem(todo))
+      )
     }
   }
 
+  private searchTodo(id: string): Todo | undefined {
+    return id ? this.todos.todos.find((todo) => todo.id === id) : undefined
+  }
+
   private createTodo(): void {
-    this.handlers.get(ViewEvents.CREATE_TODO)?.({ task: this.$taskTxt.value })
+    const todo = new Todo({ task: this.$taskTxt.value })
+
+    this.todos.insert(todo)
     this.$taskTxt.value = ''
   }
 
@@ -90,10 +83,8 @@ export class View {
     const target = event.target as HTMLInputElement
 
     if (target.classList.contains('todo-chk')) {
-      this.handlers.get(ViewEvents.UPDATE_TODO)?.({
-        id: target.parentElement?.id,
-        done: target.checked,
-      })
+      const todo = this.searchTodo(target.parentElement?.id ?? '')
+      todo?.toggle()
     }
   }
 
@@ -109,10 +100,9 @@ export class View {
     const target = event.target as HTMLElement
 
     if (target.classList.contains('todo-txt')) {
-      this.handlers.get(ViewEvents.UPDATE_TODO)?.({
-        id: target.parentElement?.id,
-        task: target.textContent ? target.textContent : this.txtCache,
-      })
+      const todo = this.searchTodo(target.parentElement?.id ?? '')
+
+      todo?.update(target.textContent ? target.textContent : this.txtCache)
       this.txtCache = ''
     }
   }
@@ -121,9 +111,11 @@ export class View {
     const target = event.target as HTMLElement
 
     if (target.classList.contains('todo-btn')) {
-      this.handlers.get(ViewEvents.REMOVE_TODO)?.({
-        id: target.parentElement?.id,
-      })
+      const todo = this.searchTodo(target.parentElement?.id ?? '')
+
+      if (todo) {
+        this.todos.remove(todo.id)
+      }
     }
   }
 

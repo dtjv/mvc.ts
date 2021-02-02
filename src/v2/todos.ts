@@ -14,8 +14,8 @@ type TodoProps = {
 
 export class Todo extends Emitter {
   public readonly id: string
-  public task: string
-  public done: boolean
+  private _task: string
+  private _done: boolean
 
   constructor(props: Pick<TodoProps, 'task'> & Partial<TodoProps>) {
     super()
@@ -25,12 +25,20 @@ export class Todo extends Emitter {
     }
 
     this.id = props.id ?? cuid()
-    this.task = props.task
-    this.done = props.done ?? false
+    this._task = props.task
+    this._done = props.done ?? false
+  }
+
+  public get task(): string {
+    return this._task
+  }
+
+  public get done(): boolean {
+    return this._done
   }
 
   public toggle() {
-    this.done = !this.done
+    this._done = !this._done
     this.emit(TodoEvents.CHANGE)
   }
 
@@ -39,23 +47,32 @@ export class Todo extends Emitter {
       throw new Error(`No task value. 'task' is required. Update failed.`)
     }
 
-    if (this.task !== task) {
-      this.task = task
+    if (this._task !== task) {
+      this._task = task
       this.emit(TodoEvents.CHANGE)
     }
   }
 
   public toJSON() {
-    return { id: this.id, task: this.task, done: this.done }
+    return { id: this.id, task: this._task, done: this._done }
   }
 }
 
 export class Todos extends Emitter {
-  private todos: Todo[] = []
+  private _todos: Todo[] = []
+
+  public get todos(): Todo[] {
+    return this._todos.slice(0)
+  }
+
+  public size(): number {
+    return this._todos.length
+  }
 
   public insert(todo: Todo): void {
-    todo.addListener(TodoEvents.CHANGE, this.onChange.bind(this))
-    this.todos.push(todo)
+    todo.addListener(TodoEvents.CHANGE, this._onChange.bind(this))
+    this._todos.push(todo)
+    this._onChange()
   }
 
   public remove(todoId: string): void {
@@ -63,14 +80,15 @@ export class Todos extends Emitter {
       throw new Error(`No id value. 'id' is required. Remove failed.`)
     }
 
-    this.todos = this.todos.filter((todo) => todo.id !== todoId)
+    this._todos = this._todos.filter((todo) => todo.id !== todoId)
+    this._onChange()
   }
 
   public toJSON() {
-    return this.todos.map((todo) => todo.toJSON())
+    return this._todos.map((todo) => todo.toJSON())
   }
 
-  private onChange() {
+  private _onChange() {
     this.emit(TodoEvents.CHANGE)
   }
 }
