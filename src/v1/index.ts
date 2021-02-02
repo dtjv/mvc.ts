@@ -5,7 +5,7 @@ import { Store } from './store'
 
 const view = new View(window.document, '#app')
 const todos = new Todos()
-const store = new Store('todos', localStorage)
+const store = new Store('todos1', localStorage)
 const app = new App(todos, view, store)
 
 app.show()
