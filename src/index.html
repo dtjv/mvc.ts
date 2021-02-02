@@ -28,9 +28,12 @@
             >
           </header>
           <p class="prose max-w-none">
-            In version 1, the App is the controller in the truest sense, as it
-            coordinates all communication between components. The View exposes
-            events and a method to register listeners on those events.
+            In version 1, the App class is the Controller in the truest sense, as it
+            coordinates all communication between components. The View calls all
+            registered event listeners when a user interacts with user
+            interface. The Controller listens for View events and acts
+            accordingly when and event occurs - namely, updating the Model,
+            persisting data and messaging the View to update.
           </p>
         </div>
         <div class="space-y-4">
@@ -42,7 +45,13 @@
               >View demo</a
             >
           </header>
-          <p class="prose max-w-none">In version 2...</p>
+          <p class="prose max-w-none">
+            In version 2, the Controller initializes the application and manages
+            data persistance. The View handles all user interaction and Model
+            updates. The Model emits events when it's data changes, which
+            triggers the Controller to persist data and message the view to
+            refresh.
+          </p>
         </div>
       </div>
     </div>
