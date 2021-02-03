@@ -14,11 +14,12 @@
         <h1 class="text-5xl font-bold text-gray-900">mvc.ts</h1>
       </header>
       <p class="prose max-w-none">
-        I split this project into two versions. A short description of each
-        follows, including a link to their respective working demos.
+        This project includes two working demonstrations of the MVC pattern. A
+        short description of each follows with a link to their respective demos
+        and source code.
       </p>
-      <div class="space-y-8">
-        <div class="space-y-4">
+      <div class="divide-y divide-gray-200">
+        <div class="py-8 space-y-4">
           <header class="flex items-center justify-between">
             <h2 class="text-3xl font-bold text-purple-500">Version 1</h2>
             <a
@@ -27,16 +28,20 @@
               >View demo</a
             >
           </header>
-          <p class="prose max-w-none">
-            In version 1, the App class is the Controller in the truest sense,
-            as it coordinates all communication between components. The View
-            calls all registered event listeners when a user interacts with user
-            interface. The Controller listens for View events and acts
-            accordingly when and event occurs - namely, updating the Model,
-            persisting data and messaging the View to update.
-          </p>
+          <div class="prose max-w-none">
+            <p>
+              In version 1, the Controller coordinates all activity and
+              communication between components. When users interact with the
+              app, the View triggers the Controller to take action - namely,
+              updating the Model, saving data to the database and messaging the
+              View to update the app's interface.
+            </p>
+            <a href="https://github.com/dtjv/mvc.ts/tree/main/src/v1"
+              >View Source</a
+            >
+          </div>
         </div>
-        <div class="space-y-4">
+        <div class="py-8 space-y-4">
           <header class="flex items-center justify-between">
             <h2 class="text-3xl font-bold text-emerald-500">Version 2</h2>
             <a
@@ -45,13 +50,16 @@
               >View demo</a
             >
           </header>
-          <p class="prose max-w-none">
-            In version 2, the Controller initializes the application and manages
-            data persistence. The View handles all user interaction and Model
-            updates. The Model emits events when its data changes, which
-            triggers the Controller to save data and message the view to
-            refresh.
-          </p>
+          <div class="prose max-w-none">
+            <p>
+              In version 2, the View updates the Model directly. When the Model
+              changes, it triggers the Controller to save data and message the
+              view to refresh the app's interface.
+            </p>
+            <a href="https://github.com/dtjv/mvc.ts/tree/main/src/v2"
+              >View Source</a
+            >
+          </div>
         </div>
       </div>
     </div>
