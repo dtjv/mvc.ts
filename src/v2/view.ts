@@ -1,7 +1,7 @@
 import { Todo, Todos } from './todos'
 
 export class View {
-  private txtCache = ''
+  private _txtCache = ''
 
   private readonly $root: HTMLElement | null
   private readonly $wrapper: HTMLElement
@@ -25,20 +25,20 @@ export class View {
       throw new Error(`root id, '${rootId}', must exist in doc`)
     }
 
-    this.$wrapper = this.createElement('div', 'wrapper')
-    this.$header = this.createElement('header')
-    this.$title = this.createElement('h1')
+    this.$wrapper = this._createElement('div', 'wrapper')
+    this.$header = this._createElement('header')
+    this.$title = this._createElement('h1')
     this.$title.textContent = 'Todos'
-    this.$version = this.createElement('span', 'version')
+    this.$version = this._createElement('span', 'version')
     this.$version.textContent = 'v2'
-    this.$task = this.createElement('div', 'flex justify-between')
-    this.$taskTxt = this.createElement('input', 'task-txt') as HTMLInputElement
+    this.$task = this._createElement('div', 'flex justify-between')
+    this.$taskTxt = this._createElement('input', 'task-txt') as HTMLInputElement
     this.$taskTxt.setAttribute('type', 'text')
     this.$taskTxt.setAttribute('placeholder', 'Enter your task')
-    this.$taskBtn = this.createElement('button', 'task-btn')
+    this.$taskBtn = this._createElement('button', 'task-btn')
     this.$taskBtn.textContent = 'Add Task'
-    this.$todos = this.createElement('ul', 'space-y-4')
-    this.$noTodos = this.createElement('p', 'hidden font-bold text-gray-500')
+    this.$todos = this._createElement('ul', 'space-y-4')
+    this.$noTodos = this._createElement('p', 'hidden font-bold text-gray-500')
     this.$noTodos.textContent = 'No tasks for you!'
 
     this.$header.append(this.$title, this.$version)
@@ -46,11 +46,11 @@ export class View {
     this.$wrapper.append(this.$header, this.$task, this.$todos, this.$noTodos)
     this.$root.append(this.$wrapper)
 
-    this.$taskBtn.addEventListener('click', this.createTodo.bind(this))
-    this.$todos.addEventListener('change', this.toggleTodo.bind(this))
-    this.$todos.addEventListener('click', this.removeTodo.bind(this))
-    this.$todos.addEventListener('focusin', this.cacheTodoTxt.bind(this))
-    this.$todos.addEventListener('focusout', this.updateTodo.bind(this))
+    this.$taskBtn.addEventListener('click', this._createTodo.bind(this))
+    this.$todos.addEventListener('change', this._toggleTodo.bind(this))
+    this.$todos.addEventListener('click', this._removeTodo.bind(this))
+    this.$todos.addEventListener('focusin', this._cacheTodoTxt.bind(this))
+    this.$todos.addEventListener('focusout', this._updateTodo.bind(this))
   }
 
   public render(): void {
@@ -63,55 +63,55 @@ export class View {
     } else {
       this.$noTodos.classList.add('hidden')
       this.$todos.append(
-        ...this.todos.todos.map((todo) => this.createItem(todo))
+        ...this.todos.todos.map((todo) => this._createItem(todo))
       )
     }
   }
 
-  private searchTodo(id: string): Todo | undefined {
+  private _searchTodo(id: string): Todo | undefined {
     return id ? this.todos.todos.find((todo) => todo.id === id) : undefined
   }
 
-  private createTodo(): void {
+  private _createTodo(): void {
     const todo = new Todo({ task: this.$taskTxt.value })
 
     this.todos.insert(todo)
     this.$taskTxt.value = ''
   }
 
-  private toggleTodo(event: Event): void {
+  private _toggleTodo(event: Event): void {
     const target = event.target as HTMLInputElement
 
     if (target.classList.contains('todo-chk')) {
-      const todo = this.searchTodo(target.parentElement?.id ?? '')
+      const todo = this._searchTodo(target.parentElement?.id ?? '')
       todo?.toggle()
     }
   }
 
-  private cacheTodoTxt(event: Event): void {
+  private _cacheTodoTxt(event: Event): void {
     const target = event.target as HTMLElement
 
     if (target?.classList.contains('todo-txt')) {
-      this.txtCache = target.textContent!
+      this._txtCache = target.textContent!
     }
   }
 
-  private updateTodo(event: Event): void {
+  private _updateTodo(event: Event): void {
     const target = event.target as HTMLElement
 
     if (target.classList.contains('todo-txt')) {
-      const todo = this.searchTodo(target.parentElement?.id ?? '')
+      const todo = this._searchTodo(target.parentElement?.id ?? '')
 
-      todo?.update(target.textContent ? target.textContent : this.txtCache)
-      this.txtCache = ''
+      todo?.update(target.textContent ? target.textContent : this._txtCache)
+      this._txtCache = ''
     }
   }
 
-  private removeTodo(event: Event): void {
+  private _removeTodo(event: Event): void {
     const target = event.target as HTMLElement
 
     if (target.classList.contains('todo-btn')) {
-      const todo = this.searchTodo(target.parentElement?.id ?? '')
+      const todo = this._searchTodo(target.parentElement?.id ?? '')
 
       if (todo) {
         this.todos.remove(todo.id)
@@ -119,7 +119,7 @@ export class View {
     }
   }
 
-  private createElement(tag: string, classList?: string) {
+  private _createElement(tag: string, classList?: string) {
     const $element = this.document.createElement(tag)
 
     if (classList) {
@@ -129,29 +129,32 @@ export class View {
     return $element
   }
 
-  private createItem(todo: Todo): HTMLElement {
-    const $li = this.createElement('li', 'todo')
+  private _createItem(todo: Todo): HTMLElement {
+    const $li = this._createElement('li', 'todo')
     $li.setAttribute('id', todo.id)
 
-    const $todoChk = this.createElement('input', 'todo-chk') as HTMLInputElement
+    const $todoChk = this._createElement(
+      'input',
+      'todo-chk'
+    ) as HTMLInputElement
     $todoChk.setAttribute('type', 'checkbox')
     if (todo.done) {
       $todoChk.setAttribute('checked', '')
     }
 
-    const $todoTxt = this.createElement('span', 'todo-txt')
+    const $todoTxt = this._createElement('span', 'todo-txt')
     $todoTxt.setAttribute('contentEditable', '')
 
     const textNode = this.document.createTextNode(todo.task)
     if (todo.done) {
-      const $s = this.createElement('s')
+      const $s = this._createElement('s')
       $s.append(textNode)
       $todoTxt.append($s)
     } else {
       $todoTxt.append(textNode)
     }
 
-    const $todoBtn = this.createElement('button', 'todo-btn')
+    const $todoBtn = this._createElement('button', 'todo-btn')
     $todoBtn.textContent = 'Delete'
 
     $li.append($todoChk, $todoTxt, $todoBtn)

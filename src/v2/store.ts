@@ -1,11 +1,11 @@
 export class Store {
-  constructor(private readonly key: string, private readonly db: Storage) {}
+  constructor(private readonly _key: string, private readonly _db: Storage) {}
 
-  get(): unknown[] {
-    return JSON.parse(this.db.getItem(this.key) ?? '[]')
+  public get(): unknown[] {
+    return JSON.parse(this._db.getItem(this._key) ?? '[]')
   }
 
-  set(data: unknown[]): void {
-    this.db.setItem(this.key, JSON.stringify(data))
+  public set(data: unknown[]): void {
+    this._db.setItem(this._key, JSON.stringify(data))
   }
 }
