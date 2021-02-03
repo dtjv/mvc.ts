@@ -1,6 +1,6 @@
 # mvc.ts
 
-A simple todo MVC app written in TypeScript.
+A Todo MVC app written in TypeScript.
 
 ### [View the demo](https://dtjv.io/mvc.ts) | [Read the article](https://dtjv.io/mvc/)
 
@@ -16,10 +16,8 @@ A simple todo MVC app written in TypeScript.
 
 ## Acknowledgements
 
-My Todo app UI is based on [Tania Rascia's](https://www.taniarascia.com/) project, [MVC.js](https://github.com/taniarascia/mvc/). I implemented the Todo update functionality the same way, using the `contenteditable` attribute - something I'd never seen before.
-
-The second version of my implementation was influenced by this
-[article](https://drstearns.github.io/tutorials/mvc/).
+- My Todo app UI is based on [Tania Rascia's](https://www.taniarascia.com/) project, [MVC.js](https://github.com/taniarascia/mvc/).
+- The second implementation is influenced by this [article](https://drstearns.github.io/tutorials/mvc/).
 
 ## License
 
