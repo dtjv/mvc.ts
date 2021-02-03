@@ -7,9 +7,9 @@ export type Todo = {
 }
 
 export class Todos {
-  private todos: Todo[] = []
+  private _todos: Todo[] = []
 
-  insert(props: Pick<Todo, 'task'> & Partial<Todo>): void {
+  public insert(props: Pick<Todo, 'task'> & Partial<Todo>): void {
     if (!props.task) {
       throw new Error(`No task. Todo 'task' is required. Insert failed.`)
     }
@@ -20,15 +20,15 @@ export class Todos {
       done: props.done ?? false,
     }
 
-    this.todos.push(todo)
+    this._todos.push(todo)
   }
 
-  update(props: Pick<Todo, 'id'> & Partial<Todo>): void {
+  public update(props: Pick<Todo, 'id'> & Partial<Todo>): void {
     if (!props.id) {
       throw new Error(`No id. Todo 'id' is required. Update failed.`)
     }
 
-    this.todos = this.todos.map((todo) =>
+    this._todos = this._todos.map((todo) =>
       todo.id === props.id
         ? {
             id: todo.id,
@@ -39,15 +39,15 @@ export class Todos {
     )
   }
 
-  remove(todoId: string): void {
+  public remove(todoId: string): void {
     if (!todoId) {
       throw new Error(`No id. Todo 'id' is required. Remove failed.`)
     }
 
-    this.todos = this.todos.filter((todo) => todo.id !== todoId)
+    this._todos = this._todos.filter((todo) => todo.id !== todoId)
   }
 
-  toJSON() {
-    return this.todos
+  public toJSON() {
+    return this._todos
   }
 }

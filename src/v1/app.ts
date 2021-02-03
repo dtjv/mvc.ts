@@ -4,62 +4,62 @@ import { Store } from './store'
 
 export class App {
   constructor(
-    private readonly todos: Todos,
-    private readonly view: View,
-    private readonly store: Store
+    private readonly _todos: Todos,
+    private readonly _view: View,
+    private readonly _store: Store
   ) {
-    this.load()
+    this._load()
 
-    this.view.registerHandler({
+    this._view.registerHandler({
       event: ViewEvents.CREATE_TODO,
-      handler: this.handleCreateTodo.bind(this),
+      handler: this._handleCreateTodo.bind(this),
     })
 
-    this.view.registerHandler({
+    this._view.registerHandler({
       event: ViewEvents.UPDATE_TODO,
-      handler: this.handleUpdateTodo.bind(this),
+      handler: this._handleUpdateTodo.bind(this),
     })
 
-    this.view.registerHandler({
+    this._view.registerHandler({
       event: ViewEvents.REMOVE_TODO,
-      handler: this.handleRemoveTodo.bind(this),
+      handler: this._handleRemoveTodo.bind(this),
     })
   }
 
-  load() {
-    this.store.get().forEach((todo) => {
-      this.todos.insert(todo as Todo)
+  public show() {
+    this._view.render(this._todos.toJSON())
+  }
+
+  private _load() {
+    this._store.get().forEach((todo) => {
+      this._todos.insert(todo as Todo)
     })
   }
 
-  save() {
-    this.store.set(this.todos.toJSON())
+  private _save() {
+    this._store.set(this._todos.toJSON())
   }
 
-  show() {
-    this.view.render(this.todos.toJSON())
-  }
-
-  handleCreateTodo(props: Partial<Todo>): void {
+  private _handleCreateTodo(props: Partial<Todo>): void {
     if (props.task) {
-      this.todos.insert({ task: props.task })
-      this.save()
+      this._todos.insert({ task: props.task })
+      this._save()
       this.show()
     }
   }
 
-  handleUpdateTodo(props: Partial<Todo>): void {
+  private _handleUpdateTodo(props: Partial<Todo>): void {
     if (props.id) {
-      this.todos.update({ ...props, id: props.id })
-      this.save()
+      this._todos.update({ ...props, id: props.id })
+      this._save()
       this.show()
     }
   }
 
-  handleRemoveTodo(props: Partial<Todo>): void {
+  private _handleRemoveTodo(props: Partial<Todo>): void {
     if (props.id) {
-      this.todos.remove(props.id)
-      this.save()
+      this._todos.remove(props.id)
+      this._save()
       this.show()
     }
   }
