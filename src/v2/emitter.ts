@@ -1,6 +1,6 @@
 export type Listener = () => void
 
-export class Emitter {
+export abstract class Emitter {
   private readonly _listeners: Map<string, Listener[]> = new Map()
 
   public addListener(event: string, listener: Listener): void {
